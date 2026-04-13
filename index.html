@@ -115,11 +115,19 @@
 
 <script>
     function openCamera() {
+        // Android
         if (window.JSBridge && JSBridge.openCamera) {
             JSBridge.openCamera();
-        } else {
-            alert("JSBridge not found");
+            return;
         }
+
+        // iOS WKWebView
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.openCamera) {
+            window.webkit.messageHandlers.openCamera.postMessage("openCamera");
+            return;
+        }
+
+        alert("Camera not supported");
     }
 
     window.onImageCaptured = function(base64) {
